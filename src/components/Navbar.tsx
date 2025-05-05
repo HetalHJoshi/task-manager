@@ -1,11 +1,10 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const location = useLocation();
 
   const getActiveClass = (path: string) => {
-    return location.pathname === path ? "active" : "";
+    return location.pathname === path ? 'active' : '';
   };
 
   return (
@@ -28,13 +27,13 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className={`nav-link ${getActiveClass("/")}`} to="/">
+              <Link className={`nav-link ${getActiveClass('/')}`} to="/">
                 Home
               </Link>
             </li>
             <li className="nav-item">
               <Link
-                className={`nav-link ${getActiveClass("/add-task")}`}
+                className={`nav-link ${getActiveClass('/add-task')}`}
                 to="/add-task"
               >
                 Add Task
