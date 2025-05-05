@@ -1,18 +1,20 @@
-import { Link, useLocation } from 'react-router-dom';
+// src/components/Navbar.tsx
+
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-  const location = useLocation();
-
-  const getActiveClass = (path: string) => {
-    return location.pathname === path ? 'active' : '';
-  };
-
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) =>
+            `navbar-brand ${isActive ? "active" : ""}`
+          }
+        >
           Task Manager
-        </Link>
+        </NavLink>
         <button
           className="navbar-toggler"
           type="button"
@@ -27,17 +29,25 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className={`nav-link ${getActiveClass('/')}`} to="/">
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active" : ""}`
+                }
+              >
                 Home
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link
-                className={`nav-link ${getActiveClass('/add-task')}`}
+              <NavLink
                 to="/add-task"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active" : ""}`
+                }
               >
                 Add Task
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>
