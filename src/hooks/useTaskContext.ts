@@ -1,11 +1,10 @@
 import { useContext } from "react";
-import { TaskContext } from "../context/TaskContext";
-import type { TaskContextType } from "../context/TaskContext";
+import { TaskContext, TaskContextType } from "../context/TaskContext";
 
 export const useTaskContext = (): TaskContextType => {
-  const context = useContext(TaskContext);
-  if (!context) {
+  const ctx = useContext(TaskContext);
+  if (!ctx) {
     throw new Error("useTaskContext must be used within a TaskProvider");
   }
-  return context;
+  return ctx;
 };

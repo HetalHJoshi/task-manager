@@ -1,6 +1,4 @@
-// src/components/Navbar.tsx
-
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
   return (
@@ -10,7 +8,7 @@ const Navbar = () => {
           to="/"
           end
           className={({ isActive }) =>
-            `navbar-brand ${isActive ? "active" : ""}`
+            `navbar-brand ${isActive ? 'active' : ''}`
           }
         >
           Task Manager
@@ -33,7 +31,7 @@ const Navbar = () => {
                 to="/"
                 end
                 className={({ isActive }) =>
-                  `nav-link ${isActive ? "active" : ""}`
+                  `nav-link ${isActive ? 'active' : ''}`
                 }
               >
                 Home
@@ -43,7 +41,7 @@ const Navbar = () => {
               <NavLink
                 to="/add-task"
                 className={({ isActive }) =>
-                  `nav-link ${isActive ? "active" : ""}`
+                  `nav-link ${isActive ? 'active' : ''}`
                 }
               >
                 Add Task

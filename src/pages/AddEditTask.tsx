@@ -1,5 +1,4 @@
-// src/components/AddEditTask.tsx
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTaskContext } from "../hooks/useTaskContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { Task, TaskStatus } from "../types/Task";
@@ -9,24 +8,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 const taskSchema = z.object({
-  title: z
-    .string()
-    .min(3, { message: "Title must be at least 3 characters long" }),
-  desc: z
-    .string()
-    .min(10, { message: "Description must be at least 10 characters long" }),
-  status: z.enum([TaskStatus.TODO, TaskStatus.IN_PROGRESS, TaskStatus.DONE], {
-    errorMap: () => ({ message: "Please select a valid status" }),
-  }),
+  title: z.string().min(3),
+  desc: z.string().min(10),
+  status: z.enum([TaskStatus.TODO, TaskStatus.IN_PROGRESS, TaskStatus.DONE]),
 });
-
 type TaskFormData = z.infer<typeof taskSchema>;
 
-const AddEditTask = () => {
+const AddEditTask: React.FC = () => {
+  const { tasks, setTasks } = useTaskContext();
   const [taskId, setTaskId] = useState<string | null>(null);
-  const { tasks, addTask, updateTask } = useTaskContext();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const isEditMode = Boolean(id);
 
   const {
     register,
@@ -36,47 +29,52 @@ const AddEditTask = () => {
     reset,
   } = useForm<TaskFormData>({
     resolver: zodResolver(taskSchema),
-    defaultValues: {
-      title: "",
-      desc: "",
-      status: TaskStatus.TODO,
-    },
+    defaultValues: { title: "", desc: "", status: TaskStatus.TODO },
   });
 
   useEffect(() => {
     if (id) {
-      // edit-mode: load and populate
-      const task = tasks.find((t) => t.id === id);
-      if (task) {
-        setTaskId(task.id);
-        setValue("title", task.title);
-        setValue("desc", task.desc);
-        setValue("status", task.status);
+      const t = tasks.find((t) => t.id === id);
+      if (t) {
+        setTaskId(t.id);
+        setValue("title", t.title);
+        setValue("desc", t.desc);
+        setValue("status", t.status);
       }
     } else {
-      // add-mode: clear everything
       setTaskId(null);
-      reset(); // goes back to defaultValues above
+      reset({ title: "", desc: "", status: TaskStatus.TODO });
     }
   }, [id, tasks, setValue, reset]);
 
   const onSubmit = (data: TaskFormData) => {
-    const task: Task = { id: taskId || uuidv4(), ...data };
-    taskId ? updateTask(task) : addTask(task);
+    if (isEditMode && taskId) {
+      // EDIT
+      setTasks((prev) =>
+        prev.map((t) => (t.id === taskId ? { ...t, ...data } : t))
+      );
+    } else {
+      // ADD
+      const newTask: Task = { id: uuidv4(), ...data };
+      setTasks((prev) => [...prev, newTask]);
+    }
+
     navigate("/");
   };
-
-  const handleCancel = () => navigate("/");
 
   return (
     <div className="container mt-5">
       <div className="card shadow-sm">
         <div className="card-body">
           <h2 className="card-title mb-4 text-center">
-            {taskId ? "Update Task" : "Add Task"}
+            {isEditMode ? "Update Task" : "Add Task"}
           </h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
-            {/* title */}
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="row g-3"
+            noValidate
+          >
+            {/* Title */}
             <div className="col-12">
               <input
                 type="text"
@@ -88,50 +86,43 @@ const AddEditTask = () => {
                 <span className="text-danger">{errors.title.message}</span>
               )}
             </div>
-            {/* desc */}
+            {/* Description */}
             <div className="col-12">
               <textarea
                 className="form-control"
                 placeholder="Description"
-                {...register("desc")}
                 rows={4}
+                {...register("desc")}
               />
               {errors.desc && (
                 <span className="text-danger">{errors.desc.message}</span>
               )}
             </div>
-            {/* status */}
+            {/* Status */}
             <div className="col-12">
-              <select
-                aria-label="Task Status"
-                className="form-select"
-                {...register("status")}
-              >
+              <select className="form-select" {...register("status")}>
                 <option value={TaskStatus.TODO}>To Do</option>
-                <option value={TaskStatus.IN_PROGRESS} disabled={!taskId}>
+                <option value={TaskStatus.IN_PROGRESS} disabled={!isEditMode}>
                   In Progress
                 </option>
-                <option value={TaskStatus.DONE} disabled={!taskId}>
+                <option value={TaskStatus.DONE} disabled={!isEditMode}>
                   Done
                 </option>
               </select>
-              {errors.status && (
-                <span className="text-danger">{errors.status.message}</span>
-              )}
             </div>
-            {/* buttons */}
+            {/* Buttons */}
             <div className="col-6">
               <button
                 type="button"
                 className="btn btn-secondary w-100"
-                onClick={handleCancel}
+                onClick={() => navigate("/")}
               >
                 Cancel
               </button>
             </div>
             <div className="col-6">
-              <button className="btn btn-primary w-100" type="submit">
-                {taskId ? "Update Task" : "Add Task"}
+              <button type="submit" className="btn btn-primary w-100">
+                {isEditMode ? "Update Task" : "Add Task"}
               </button>
             </div>
           </form>
