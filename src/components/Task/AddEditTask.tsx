@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useTaskContext } from "../hooks/useTaskContext";
+import { useTaskContext } from "./TaskProvider";
 import { useNavigate, useParams } from "react-router-dom";
-import { Task, TaskStatus } from "../types/Task";
+import { Task, TaskStatus } from "../../types/Task/types";
 import { v4 as uuidv4 } from "uuid";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

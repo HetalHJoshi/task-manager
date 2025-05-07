@@ -1,9 +1,8 @@
 import React, { useState, useMemo, ChangeEvent } from "react";
-import { useTaskContext } from "../hooks/useTaskContext";
-import { Task, TaskStatus } from "../types/Task";
+import { useTaskContext } from "./TaskProvider";
+import { Task, TaskStatus } from "../../types/Task/types";
 import { Link } from "react-router-dom";
-import TaskLegend from "../components/TaskLegend/TaskLegend";
-import TaskFilter, { FilterKey } from "../components/TaskFilter/TaskFilter";
+import TaskFilter, { FilterKey } from "../../components/Task/TaskFilter";
 
 const TaskList: React.FC = () => {
   const { tasks, setTasks } = useTaskContext();
@@ -70,7 +69,30 @@ const TaskList: React.FC = () => {
     <div className="container mt-5">
       <h2 className="mb-4 text-center">Task List</h2>
 
-      <TaskLegend />
+      {/* Embedded TaskLegend */}
+      <div className="card p-3 mb-4 shadow-lg">
+        <h5 className="mb-3">Legend</h5>
+        <div className="d-flex align-items-center gap-4">
+          <div className="d-flex align-items-center">
+            <span className="badge bg-danger bg-opacity-25 border border-danger me-2">
+              &nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+            To Do
+          </div>
+          <div className="d-flex align-items-center">
+            <span className="badge bg-warning bg-opacity-25 border border-warning text-dark me-2">
+              &nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+            In Progress
+          </div>
+          <div className="d-flex align-items-center">
+            <span className="badge bg-success bg-opacity-25 border border-success me-2">
+              &nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+            Done
+          </div>
+        </div>
+      </div>
 
       <TaskFilter filters={filters} handleFilterChange={handleFilterChange} />
 
@@ -115,14 +137,12 @@ const TaskList: React.FC = () => {
                         <Link
                           to={`/edit-task/${task.id}`}
                           className="btn btn-warning btn-sm"
-                          aria-label={`Edit task ${task.title}`}
                         >
                           Edit
                         </Link>
                         <button
                           className="btn btn-danger btn-sm"
                           onClick={() => handleDelete(task.id, task.title)}
-                          aria-label={`Delete task ${task.title}`}
                         >
                           Delete
                         </button>

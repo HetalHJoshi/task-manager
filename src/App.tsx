@@ -3,10 +3,10 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import { TaskProvider } from "./context/TaskProvider";
+import { TaskProvider } from "./components/Task/TaskProvider";
 import Navbar from "./components/Navbar/Navbar";
-import AddEditTask from "./pages/AddEditTask";
-import TaskList from "./pages/TaskList";
+import AddEditTask from "./components/Task/AddEditTask";
+import TaskList from "./components/Task/TaskList";
 
 const App = () => {
   return (

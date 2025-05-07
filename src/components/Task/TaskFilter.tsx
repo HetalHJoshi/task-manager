@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { TaskStatus } from "../../types/Task";
+import { TaskStatus } from "../../types/Task/types";
 
 export type FilterKey = "title" | "desc" | "both" | "status";
 
