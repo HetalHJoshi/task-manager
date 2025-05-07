@@ -1,15 +1,13 @@
-// src/pages/TaskList.tsx
 import React, { useState, useMemo, ChangeEvent } from "react";
 import { useTaskContext } from "../hooks/useTaskContext";
 import { Task, TaskStatus } from "../types/Task";
 import { Link } from "react-router-dom";
-import TaskLegend from "../components/Legend/TaskLegend";
-import TaskFilter, { FilterKey } from "../components/Filter/TaskFilter";
+import TaskLegend from "../components/TaskLegend/TaskLegend";
+import TaskFilter, { FilterKey } from "../components/TaskFilter/TaskFilter";
 
 const TaskList: React.FC = () => {
   const { tasks, setTasks } = useTaskContext();
 
-  // State for filter inputs
   const [filters, setFilters] = useState<Record<FilterKey, string>>({
     title: "",
     desc: "",
@@ -77,7 +75,7 @@ const TaskList: React.FC = () => {
       <TaskFilter filters={filters} handleFilterChange={handleFilterChange} />
 
       {filteredTasks.length === 0 ? (
-        <div className="alert alert-info" role="alert">
+        <div className="alert alert-info text-center" role="alert">
           No tasks found.
         </div>
       ) : (

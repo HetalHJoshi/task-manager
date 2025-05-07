@@ -10,9 +10,9 @@ import TaskList from "./pages/TaskList";
 
 const App = () => {
   return (
-    <TaskProvider>
-      <BrowserRouter>
-        <Navbar />
+    <BrowserRouter>
+      <Navbar />
+      <TaskProvider>
         <main className="container mt-4">
           <Routes>
             <Route path="/" element={<TaskList />} />
@@ -20,8 +20,8 @@ const App = () => {
             <Route path="/edit-task/:id" element={<AddEditTask />} />
           </Routes>
         </main>
-      </BrowserRouter>
-    </TaskProvider>
+      </TaskProvider>
+    </BrowserRouter>
   );
 };
 

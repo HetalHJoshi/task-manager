@@ -34,27 +34,25 @@ const AddEditTask: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      const t = tasks.find((t) => t.id === id);
-      if (t) {
-        setTaskId(t.id);
-        setValue("title", t.title);
-        setValue("desc", t.desc);
-        setValue("status", t.status);
+      const task = tasks.find((task) => task.id === id);
+      if (task) {
+        setTaskId(task.id);
+        setValue("title", task.title);
+        setValue("desc", task.desc);
+        setValue("status", task.status);
       }
     } else {
       setTaskId(null);
       reset({ title: "", desc: "", status: TaskStatus.TODO });
     }
-  }, [id, tasks, setValue, reset]);
+  }, [id, tasks, reset]);
 
   const onSubmit = (data: TaskFormData) => {
     if (isEditMode && taskId) {
-      // EDIT
       setTasks((prev) =>
-        prev.map((t) => (t.id === taskId ? { ...t, ...data } : t))
+        prev.map((task) => (task.id === taskId ? { ...task, ...data } : task))
       );
     } else {
-      // ADD
       const newTask: Task = { id: uuidv4(), ...data };
       setTasks((prev) => [...prev, newTask]);
     }
@@ -74,7 +72,6 @@ const AddEditTask: React.FC = () => {
             className="row g-3"
             noValidate
           >
-            {/* Title */}
             <div className="col-12">
               <input
                 type="text"
@@ -86,7 +83,7 @@ const AddEditTask: React.FC = () => {
                 <span className="text-danger">{errors.title.message}</span>
               )}
             </div>
-            {/* Description */}
+
             <div className="col-12">
               <textarea
                 className="form-control"
@@ -98,7 +95,7 @@ const AddEditTask: React.FC = () => {
                 <span className="text-danger">{errors.desc.message}</span>
               )}
             </div>
-            {/* Status */}
+
             <div className="col-12">
               <select className="form-select" {...register("status")}>
                 <option value={TaskStatus.TODO}>To Do</option>
@@ -110,7 +107,7 @@ const AddEditTask: React.FC = () => {
                 </option>
               </select>
             </div>
-            {/* Buttons */}
+
             <div className="col-6">
               <button
                 type="button"
